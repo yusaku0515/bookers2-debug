@@ -1,0 +1,50 @@
+ <% if flash[:notice] %><!-- サクセスメッセージ -->
+  <div class="flash">
+   <%= flash[:notice] %>
+  </div>
+ <% end %>
+<div class="container">
+<% if @book.errors.any? %>
+	<h3><%= @book.errors.count %>error occurrence</h3><!--エラーメッセ-->
+	<ul>
+		<% @book.errors.full_messages.each do |message| %>
+		<li><%= message %></li>
+		<% end %>
+	</ul>
+<% end %>
+
+<div class="row">
+	<div class="col-xs-3">
+
+		<h2>User info</h2>
+		<%= render 'users/profile', user: @books.user %>
+
+		<h2>New book</h2>
+		<%= render 'books/newform', book: @book %>
+
+	</div>
+
+	<div class="col-xs-9">
+		<h2>Book detail</h2>
+
+		<table class="table table-hover table-inverse">
+				<tr>
+					<td>
+						<%= link_to user_path(@books.user) do %>
+						<%= attachment_image_tag @books.user, :profile_image, :fill, 60, 60, fallback: "no-image-mini.jpg" %><br>
+						<%= @books.user.name %>
+						<% end %>
+					</td>
+					<td><%= link_to @books.title, book_path(@books.id) %></td>
+					<td><%= @books.body %></td>
+					<% if current_user.id == @books.user_id %>
+					<td><button type="button" class="btn btn-success"><%= link_to "Edit", edit_book_path(@books), class:"text-muted" %></button></td>
+					<td><%= link_to "Destroy",book_path(@books), method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger" %></td>
+					<% end %>
+				</tr>
+			</table>
+
+	</div>
+</div>
+</div>
+
